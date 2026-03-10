@@ -17,14 +17,10 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            margin: 0;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 20px; margin: 0;
         }
         .container { max-width: 450px; width: 100%; text-align: center; }
-        
         header { border-bottom: 2px solid var(--button); margin-bottom: 20px; width: 100%; }
         h1 { margin: 15px 0; letter-spacing: 2px; font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
 
@@ -32,14 +28,20 @@
             background: var(--button);
             padding: 25px 20px;
             border-radius: 12px;
-            margin: 20px 0;
+            margin: 20px 0 10px 0;
             min-height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            font-size: 1.15rem;
-            line-height: 1.5;
+            display: flex; flex-direction: column; justify-content: center;
+            font-size: 1.15rem; line-height: 1.5;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .sub-header {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         #button-grid {
@@ -50,55 +52,33 @@
         }
 
         button {
-            padding: 15px 10px;
-            border: none;
-            border-radius: 6px;
-            background: var(--button);
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            transition: 0.2s;
+            padding: 15px 10px; border: none; border-radius: 6px;
+            background: var(--button); color: white;
+            cursor: pointer; font-weight: bold; font-size: 0.9rem;
+            text-transform: uppercase; transition: 0.2s;
         }
         button:hover:not(:disabled) { background: var(--button-hover); }
         button:disabled { opacity: 0.2; cursor: default; }
 
         input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 6px;
-            border: 2px solid var(--button);
-            background: #000;
-            color: white;
-            box-sizing: border-box;
-            text-transform: uppercase;
-            text-align: center;
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            outline: none;
+            width: 100%; padding: 15px; border-radius: 6px;
+            border: 2px solid var(--button); background: #000;
+            color: white; box-sizing: border-box; text-transform: uppercase;
+            text-align: center; font-size: 1.4rem; margin-bottom: 15px; outline: none;
         }
         input:focus { border-color: var(--accent); }
 
         .submit-btn { background: var(--accent); width: 100%; font-size: 1.2rem; height: 60px; }
         
         #result {
-            display: none;
-            margin-top: 30px;
-            padding: 25px;
-            border: 3px solid var(--accent);
-            border-radius: 15px;
-            background: rgba(83, 141, 78, 0.15);
-            animation: slideUp 0.5s ease-out;
+            display: none; margin-top: 30px; padding: 25px;
+            border: 3px solid var(--accent); border-radius: 15px;
+            background: rgba(83, 141, 78, 0.15); animation: slideUp 0.5s ease-out;
         }
 
         .streak-container {
-            display: flex;
-            justify-content: space-around;
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
+            display: flex; justify-content: space-around; margin: 15px 0;
+            padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;
         }
         .streak-stat { display: flex; flex-direction: column; font-size: 0.8rem; color: #aaa; }
         .streak-val { font-size: 1.5rem; color: var(--gold); font-weight: bold; }
@@ -119,6 +99,7 @@
     <div class="hint-box" id="display-hint">Loading...</div>
 
     <div id="game-ui">
+        <div class="sub-header" id="additional-hint-text" style="display:none;">Need an Additional Hint?</div>
         <div id="button-grid"></div>
         <input type="text" id="guess-input" placeholder="GUESS THE ITEM" autocomplete="off">
         <button class="submit-btn" id="submit-btn" onclick="checkGuess()">SUBMIT GUESS</button>
@@ -126,12 +107,10 @@
 
     <div id="result">
         <h2 style="margin: 0 0 10px 0;">SOLVED! 🎉</h2>
-        
         <div class="streak-container">
             <div class="streak-stat">STREAK <span class="streak-val" id="streak-count">0</span></div>
             <div class="streak-stat">TOTAL WINS <span class="streak-val" id="total-wins">0</span></div>
         </div>
-
         <p id="final-score-text" style="font-size: 1.3rem; font-weight: bold; margin: 10px 0;"></p>
         <p id="answer-reveal" style="font-style: italic; opacity: 0.8;"></p>
         <button class="share-btn" onclick="shareResults()">SHARE SCORE</button>
@@ -142,14 +121,13 @@
     const categoryNames = {
         Hint_S: "Science", Hint_E: "Entertainment", Hint_H: "History", 
         Hint_F: "Food", Hint_G: "Geography", Hint_P: "Pop Culture", 
-        Hint_U: "Utility", Hint_N: "Nature"
+        Hint_U: "Utility", Hint_N: "Nature", Hint_R: "Random"
     };
 
     let todaysObject = null;
     let hintsUsedCount = 0;
     let hintPath = "";
 
-    // Helper: Get UTC Date String (YYYY-MM-DD)
     function getUtcDate(dateObj = new Date()) {
         const y = dateObj.getUTCFullYear();
         const m = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
@@ -163,7 +141,6 @@
             const allData = await response.json();
             const utcToday = getUtcDate();
 
-            // 1. Check if item exists for today
             todaysObject = allData.find(item => item["Date (YYYY-MM-DD)"].trim() === utcToday);
 
             if (!todaysObject) {
@@ -171,7 +148,6 @@
                 return;
             }
 
-            // 2. CHECK LOCAL STORAGE: Have they solved it today?
             const lastSolvedDate = localStorage.getItem('iod_lastSolved');
             if (lastSolvedDate === utcToday) {
                 const savedScore = localStorage.getItem('iod_lastScore') || "Solved";
@@ -179,7 +155,6 @@
                 return;
             }
 
-            // 3. IF NEW DAY: Render game
             renderGame();
 
         } catch (error) {
@@ -191,6 +166,8 @@
     function renderGame() {
         const grid = document.getElementById('button-grid');
         document.getElementById('display-hint').innerHTML = `<strong>Initial Clue:</strong><br>${todaysObject["Basic Hint"]}`;
+        
+        let hasHints = false;
 
         Object.keys(todaysObject).forEach(key => {
             if (key.startsWith("Hint_") && todaysObject[key] && todaysObject[key].trim() !== "") {
@@ -198,8 +175,13 @@
                 btn.innerText = categoryNames[key] || key.replace("Hint_", "");
                 btn.onclick = (e) => revealHint(key, e.target);
                 grid.appendChild(btn);
+                hasHints = true;
             }
         });
+
+        if(hasHints) {
+            document.getElementById('additional-hint-text').style.display = 'block';
+        }
     }
 
     function revealHint(key, btn) {
@@ -223,19 +205,15 @@
         const utcToday = getUtcDate();
         const scoreString = reloadedScore || `${hintsUsedCount}${hintPath}`;
 
-        // Update Persistence & Streak if this is a fresh win
         if (!reloadedScore) {
             updateStreakAndStats(utcToday, scoreString);
         }
 
-        // Update UI stats
         document.getElementById('streak-count').innerText = localStorage.getItem('iod_streak') || 0;
         document.getElementById('total-wins').innerText = localStorage.getItem('iod_totalWins') || 0;
-        
         document.getElementById('final-score-text').innerText = `Score: ${scoreString}`;
         document.getElementById('answer-reveal').innerText = `The item was: ${todaysObject["Answer"]}`;
         
-        // Hide Game / Show Results
         document.getElementById('game-ui').style.display = 'none';
         document.getElementById('display-hint').innerHTML = "<strong>Come back tomorrow for a new item!</strong>";
         document.getElementById('result').style.display = 'block';
@@ -245,24 +223,16 @@
         let streak = parseInt(localStorage.getItem('iod_streak') || "0");
         let totalWins = parseInt(localStorage.getItem('iod_totalWins') || "0");
         const lastDate = localStorage.getItem('iod_lastSolved');
-
-        // Total Wins
         totalWins++;
 
-        // Calculate Streak
         if (lastDate) {
             const lastDateObj = new Date(lastDate + "T00:00:00Z");
             const todayObj = new Date(todayStr + "T00:00:00Z");
             const diffDays = (todayObj - lastDateObj) / (1000 * 60 * 60 * 24);
-
-            if (diffDays === 1) {
-                streak++; // Consecutive day
-            } else if (diffDays > 1) {
-                streak = 1; // Missed a day, reset to 1
-            }
-            // (If diffDays is 0, they already played, handled by initGame)
+            if (diffDays === 1) streak++; 
+            else if (diffDays > 1) streak = 1;
         } else {
-            streak = 1; // First win ever
+            streak = 1;
         }
 
         localStorage.setItem('iod_lastSolved', todayStr);

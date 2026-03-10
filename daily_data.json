@@ -1,8 +1,8 @@
 [
   {
     "Date (YYYY-MM-DD)": "2026-03-10",
-    "Answer": "Cat",
-    "Basic Hint": "A four legged friend with an attitude.",
+    "Answer": "CAT",
+    "Basic Hint": "A domesticated obligate carnivore.",
     "Hint_S": "Have handy retractable claws",
     "Hint_E": "Tom was one of these.",
     "Hint_H": "Egpytians held them in high regard.",
@@ -10,7 +10,8 @@
     "Hint_G": "Larger, deadlier varients can be found in the wild",
     "Hint_P": "",
     "Hint_U": "",
-    "Hint_N": "Can easily disrupt outside environments."
+    "Hint_N": "Can easily disrupt outside environments.",
+    "Hint_R": "Bob, in RuneScape."
   },
   {
     "Date (YYYY-MM-DD)": "2026-03-11",
@@ -23,7 +24,8 @@
     "Hint_G": "",
     "Hint_P": "",
     "Hint_U": "",
-    "Hint_N": "Hybrid fruit."
+    "Hint_N": "Hybrid fruit.",
+    "Hint_R": ""
   },
   {
     "Date (YYYY-MM-DD)": "2026-03-12",
@@ -36,7 +38,8 @@
     "Hint_G": "",
     "Hint_P": "Footprint term.",
     "Hint_U": "",
-    "Hint_N": ""
+    "Hint_N": "",
+    "Hint_R": ""
   },
   {
     "Date (YYYY-MM-DD)": "2026-03-13",
@@ -49,6 +52,7 @@
     "Hint_G": "Points North.",
     "Hint_P": "",
     "Hint_U": "Navigation.",
-    "Hint_N": ""
+    "Hint_N": "",
+    "Hint_R": ""
   }
 ]
