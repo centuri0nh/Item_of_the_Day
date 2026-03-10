@@ -11,6 +11,7 @@
             --accent: #538d4e;
             --button: #3b3b3c;
             --button-hover: #4e4e50;
+            --gold: #d4af37;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,15 +25,8 @@
         }
         .container { max-width: 450px; width: 100%; text-align: center; }
         
-        /* New Title Styling */
         header { border-bottom: 2px solid var(--button); margin-bottom: 20px; width: 100%; }
-        h1 { 
-            margin: 15px 0; 
-            letter-spacing: 2px; 
-            font-size: 1.8rem; 
-            font-weight: 800;
-            text-transform: uppercase;
-        }
+        h1 { margin: 15px 0; letter-spacing: 2px; font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
 
         .hint-box {
             background: var(--button);
@@ -98,10 +92,18 @@
             animation: slideUp 0.5s ease-out;
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .streak-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
         }
+        .streak-stat { display: flex; flex-direction: column; font-size: 0.8rem; color: #aaa; }
+        .streak-val { font-size: 1.5rem; color: var(--gold); font-weight: bold; }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         .share-btn { background: #1da1f2; margin-top: 20px; width: 100%; }
         .error-msg { color: #ff6b6b; font-weight: bold; font-size: 0.9rem; }
@@ -114,18 +116,23 @@
         <h1>ITEM OF THE DAY</h1>
     </header>
     
-    <div class="hint-box" id="display-hint">
-        Loading...
+    <div class="hint-box" id="display-hint">Loading...</div>
+
+    <div id="game-ui">
+        <div id="button-grid"></div>
+        <input type="text" id="guess-input" placeholder="GUESS THE ITEM" autocomplete="off">
+        <button class="submit-btn" id="submit-btn" onclick="checkGuess()">SUBMIT GUESS</button>
     </div>
-
-    <div id="button-grid"></div>
-
-    <input type="text" id="guess-input" placeholder="GUESS THE ITEM" autocomplete="off">
-    <button class="submit-btn" id="submit-btn" onclick="checkGuess()">SUBMIT GUESS</button>
 
     <div id="result">
         <h2 style="margin: 0 0 10px 0;">SOLVED! 🎉</h2>
-        <p id="final-score-text" style="font-size: 1.5rem; font-weight: bold; margin: 10px 0;"></p>
+        
+        <div class="streak-container">
+            <div class="streak-stat">STREAK <span class="streak-val" id="streak-count">0</span></div>
+            <div class="streak-stat">TOTAL WINS <span class="streak-val" id="total-wins">0</span></div>
+        </div>
+
+        <p id="final-score-text" style="font-size: 1.3rem; font-weight: bold; margin: 10px 0;"></p>
         <p id="answer-reveal" style="font-style: italic; opacity: 0.8;"></p>
         <button class="share-btn" onclick="shareResults()">SHARE SCORE</button>
     </div>
@@ -142,38 +149,48 @@
     let hintsUsedCount = 0;
     let hintPath = "";
 
+    // Helper: Get UTC Date String (YYYY-MM-DD)
+    function getUtcDate(dateObj = new Date()) {
+        const y = dateObj.getUTCFullYear();
+        const m = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+        const d = String(dateObj.getUTCDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
     async function initGame() {
         try {
             const response = await fetch('daily_data.json?t=' + new Date().getTime());
             const allData = await response.json();
+            const utcToday = getUtcDate();
 
-            const now = new Date();
-            const year = now.getUTCFullYear();
-            const month = String(now.getUTCMonth() + 1).padStart(2, '0');
-            const day = String(now.getUTCDate()).padStart(2, '0');
-            const utcToday = `${year}-${month}-${day}`;
+            // 1. Check if item exists for today
+            todaysObject = allData.find(item => item["Date (YYYY-MM-DD)"].trim() === utcToday);
 
-            todaysObject = allData.find(item => {
-                const jsonDate = item["Date (YYYY-MM-DD)"].trim();
-                return jsonDate === utcToday;
-            });
-
-            if (todaysObject) {
-                renderGame();
-            } else {
-                document.getElementById('display-hint').innerHTML = 
-                    `<span class='error-msg'>No item found for UTC Date: ${utcToday}.<br>Check your JSON file!</span>`;
+            if (!todaysObject) {
+                document.getElementById('display-hint').innerHTML = `<span class='error-msg'>New item coming at UTC midnight!</span>`;
+                return;
             }
+
+            // 2. CHECK LOCAL STORAGE: Have they solved it today?
+            const lastSolvedDate = localStorage.getItem('iod_lastSolved');
+            if (lastSolvedDate === utcToday) {
+                const savedScore = localStorage.getItem('iod_lastScore') || "Solved";
+                showWin(savedScore);
+                return;
+            }
+
+            // 3. IF NEW DAY: Render game
+            renderGame();
+
         } catch (error) {
             console.error(error);
-            document.getElementById('display-hint').innerHTML = "<span class='error-msg'>Could not load data.</span>";
+            document.getElementById('display-hint').innerHTML = "<span class='error-msg'>Data load error.</span>";
         }
     }
 
     function renderGame() {
         const grid = document.getElementById('button-grid');
-        const hintDisplay = document.getElementById('display-hint');
-        hintDisplay.innerHTML = `<strong>Initial Clue:</strong><br>${todaysObject["Basic Hint"]}`;
+        document.getElementById('display-hint').innerHTML = `<strong>Initial Clue:</strong><br>${todaysObject["Basic Hint"]}`;
 
         Object.keys(todaysObject).forEach(key => {
             if (key.startsWith("Hint_") && todaysObject[key] && todaysObject[key].trim() !== "") {
@@ -189,13 +206,11 @@
         hintsUsedCount++;
         const codeLetter = key.split('_')[1] || key.charAt(5);
         hintPath += codeLetter;
-        const displayName = categoryNames[key] || key.replace("Hint_", "");
-        document.getElementById('display-hint').innerHTML = `<strong>${displayName}:</strong><br>${todaysObject[key]}`;
+        document.getElementById('display-hint').innerHTML = `<strong>${categoryNames[key] || "Hint"}:</strong><br>${todaysObject[key]}`;
         btn.disabled = true;
     }
 
     function checkGuess() {
-        if (!todaysObject) return;
         const userInput = document.getElementById('guess-input').value.trim().toUpperCase();
         if (userInput === todaysObject["Answer"].trim().toUpperCase()) {
             showWin();
@@ -204,24 +219,67 @@
         }
     }
 
-    function showWin() {
-        const scoreString = `${hintsUsedCount}${hintPath}`;
+    function showWin(reloadedScore = null) {
+        const utcToday = getUtcDate();
+        const scoreString = reloadedScore || `${hintsUsedCount}${hintPath}`;
+
+        // Update Persistence & Streak if this is a fresh win
+        if (!reloadedScore) {
+            updateStreakAndStats(utcToday, scoreString);
+        }
+
+        // Update UI stats
+        document.getElementById('streak-count').innerText = localStorage.getItem('iod_streak') || 0;
+        document.getElementById('total-wins').innerText = localStorage.getItem('iod_totalWins') || 0;
+        
         document.getElementById('final-score-text').innerText = `Score: ${scoreString}`;
         document.getElementById('answer-reveal').innerText = `The item was: ${todaysObject["Answer"]}`;
+        
+        // Hide Game / Show Results
+        document.getElementById('game-ui').style.display = 'none';
+        document.getElementById('display-hint').innerHTML = "<strong>Come back tomorrow for a new item!</strong>";
         document.getElementById('result').style.display = 'block';
-        document.getElementById('guess-input').disabled = true;
-        document.getElementById('submit-btn').disabled = true;
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function updateStreakAndStats(todayStr, score) {
+        let streak = parseInt(localStorage.getItem('iod_streak') || "0");
+        let totalWins = parseInt(localStorage.getItem('iod_totalWins') || "0");
+        const lastDate = localStorage.getItem('iod_lastSolved');
+
+        // Total Wins
+        totalWins++;
+
+        // Calculate Streak
+        if (lastDate) {
+            const lastDateObj = new Date(lastDate + "T00:00:00Z");
+            const todayObj = new Date(todayStr + "T00:00:00Z");
+            const diffDays = (todayObj - lastDateObj) / (1000 * 60 * 60 * 24);
+
+            if (diffDays === 1) {
+                streak++; // Consecutive day
+            } else if (diffDays > 1) {
+                streak = 1; // Missed a day, reset to 1
+            }
+            // (If diffDays is 0, they already played, handled by initGame)
+        } else {
+            streak = 1; // First win ever
+        }
+
+        localStorage.setItem('iod_lastSolved', todayStr);
+        localStorage.setItem('iod_lastScore', score);
+        localStorage.setItem('iod_streak', streak);
+        localStorage.setItem('iod_totalWins', totalWins);
     }
 
     function shareResults() {
-        const scoreString = `${hintsUsedCount}${hintPath}`;
-        const text = `I solved today's Item of the Day!\nScore: ${scoreString}\nPlay here: ${window.location.href}`;
+        const score = document.getElementById('final-score-text').innerText;
+        const streak = localStorage.getItem('iod_streak') || 0;
+        const text = `Item of the Day ✅\n${score}\nStreak: ${streak} days\nPlay: ${window.location.href}`;
         if (navigator.share) {
             navigator.share({ title: 'Item of the Day', text: text });
         } else {
             navigator.clipboard.writeText(text);
-            alert("Score copied to clipboard!");
+            alert("Results copied!");
         }
     }
 
