@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Object - Guess the Item</title>
+    <title>Daily Object Trivia</title>
     <style>
         :root {
             --bg: #121213;
             --text: #ffffff;
             --accent: #538d4e;
-            --button: #3a3a3c;
+            --button: #3b3b3c;
             --button-hover: #4e4e50;
         }
         body {
-            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             display: flex;
@@ -21,86 +21,76 @@
             align-items: center;
             padding: 20px;
             margin: 0;
-            -webkit-tap-highlight-color: transparent;
         }
         .container { max-width: 450px; width: 100%; text-align: center; }
-        
-        header { border-bottom: 1px solid var(--button); margin-bottom: 20px; width: 100%; padding-bottom: 10px; }
-        h1 { margin: 10px 0; letter-spacing: 2px; text-transform: uppercase; font-size: 1.5rem; }
+        header { border-bottom: 1px solid var(--button); margin-bottom: 20px; width: 100%; }
+        h1 { margin: 15px 0; letter-spacing: 1px; font-size: 1.6rem; }
 
         .hint-box {
             background: var(--button);
-            padding: 25px 15px;
-            border-radius: 8px;
+            padding: 25px 20px;
+            border-radius: 12px;
             margin: 20px 0;
-            min-height: 80px;
+            min-height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             line-height: 1.5;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
         #button-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         button {
-            padding: 14px;
+            padding: 15px 10px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             background: var(--button);
             color: white;
             cursor: pointer;
             font-weight: bold;
             font-size: 0.9rem;
             text-transform: uppercase;
-            transition: background 0.2s;
+            transition: 0.2s;
         }
         button:hover:not(:disabled) { background: var(--button-hover); }
         button:disabled { opacity: 0.2; cursor: default; }
 
-        .input-group { margin-top: 10px; }
         input {
             width: 100%;
             padding: 15px;
-            border-radius: 4px;
+            border-radius: 6px;
             border: 2px solid var(--button);
             background: #000;
             color: white;
             box-sizing: border-box;
             text-transform: uppercase;
             text-align: center;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
             outline: none;
         }
         input:focus { border-color: var(--accent); }
 
-        .submit-btn { background: var(--accent); width: 100%; font-size: 1.2rem; }
+        .submit-btn { background: var(--accent); width: 100%; font-size: 1.2rem; height: 60px; }
         
         #result {
             display: none;
-            margin-top: 25px;
+            margin-top: 30px;
             padding: 25px;
             border: 3px solid var(--accent);
-            border-radius: 12px;
-            background: rgba(83, 141, 78, 0.1);
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 15px;
+            background: rgba(83, 141, 78, 0.15);
         }
 
-        @keyframes popIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .share-btn { background: #1da1f2; margin-top: 15px; width: 100%; }
-        
-        .error-msg { color: #ff4444; margin-top: 20px; }
+        .share-btn { background: #1da1f2; margin-top: 20px; width: 100%; }
+        .error-msg { color: #ff6b6b; font-weight: bold; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -111,68 +101,65 @@
     </header>
     
     <div class="hint-box" id="display-hint">
-        Loading today's challenge...
+        Syncing with UTC Clock...
     </div>
 
-    <div id="button-grid">
-        </div>
+    <div id="button-grid"></div>
 
-    <div class="input-group">
-        <input type="text" id="guess-input" placeholder="GUESS THE OBJECT" autocomplete="off">
-        <button class="submit-btn" id="submit-btn" onclick="checkGuess()">SUBMIT GUESS</button>
-    </div>
+    <input type="text" id="guess-input" placeholder="GUESS THE OBJECT" autocomplete="off">
+    <button class="submit-btn" id="submit-btn" onclick="checkGuess()">SUBMIT GUESS</button>
 
     <div id="result">
-        <h2 style="margin-top: 0;">CORRECT! 🎉</h2>
-        <p id="final-score-text" style="font-size: 1.4rem; font-weight: bold;"></p>
-        <p id="answer-reveal" style="font-style: italic; color: #aaa;"></p>
-        <button class="share-btn" onclick="shareResults()">SHARE RESULTS</button>
+        <h2 style="margin: 0 0 10px 0;">SOLVED! 🎉</h2>
+        <p id="final-score-text" style="font-size: 1.5rem; font-weight: bold; margin: 10px 0;"></p>
+        <p id="answer-reveal" style="font-style: italic; opacity: 0.8;"></p>
+        <button class="share-btn" onclick="shareResults()">SHARE SCORE</button>
     </div>
 </div>
 
 <script>
-    // 1. Category Mapping (Map letters to Display Names)
+    // 1. Mapping for your specific Hint_ column headers
     const categoryNames = {
-        S: "Science",
-        E: "Entertainment",
-        H: "History",
-        F: "Food",
-        G: "Geography",
-        P: "Pop Culture",
-        U: "Utility",
-        N: "Nature"
+        Hint_S: "Science", Hint_E: "Entertainment", Hint_H: "History", 
+        Hint_F: "Food", Hint_G: "Geography", Hint_P: "Pop Culture", 
+        Hint_U: "Utility", Hint_N: "Nature"
     };
 
-    // 2. State Variables
     let todaysObject = null;
     let hintsUsedCount = 0;
     let hintPath = "";
 
-    // 3. Main Init Function
     async function initGame() {
         try {
-            // Fetch the JSON file (ensure it's named daily_data.json in the same folder)
-            const response = await fetch('daily_data.json');
+            // Add a timestamp to the URL to bypass browser cache
+            const response = await fetch('daily_data.json?t=' + new Date().getTime());
             const allData = await response.json();
 
-            // Get current date in YYYY-MM-DD format (local time)
+            // 2. FORCE UTC DATE CALCULATION
             const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const todayStr = `${year}-${month}-${day}`;
+            const year = now.getUTCFullYear();
+            const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(now.getUTCDate()).padStart(2, '0');
+            const utcToday = `${year}-${month}-${day}`;
 
-            // Find the object for today
-            todaysObject = allData.find(item => item.date === todayStr);
+            console.log("UTC Today String:", utcToday);
+
+            // 3. Match against your exact JSON key: "Date (YYYY-MM-DD)"
+            todaysObject = allData.find(item => {
+                const jsonDate = item["Date (YYYY-MM-DD)"].trim();
+                return jsonDate === utcToday;
+            });
 
             if (todaysObject) {
                 renderGame();
             } else {
-                document.getElementById('display-hint').innerHTML = "<span class='error-msg'>New object coming at midnight!</span>";
+                document.getElementById('display-hint').innerHTML = 
+                    `<span class='error-msg'>No object found for UTC Date: ${utcToday}.<br>Check your JSON file!</span>`;
             }
         } catch (error) {
-            console.error("Fetch Error:", error);
-            document.getElementById('display-hint').innerHTML = "<span class='error-msg'>Unable to load game data. Check your JSON file.</span>";
+            console.error("Initialization Error:", error);
+            document.getElementById('display-hint').innerHTML = 
+                "<span class='error-msg'>Could not load daily_data.json.<br>Ensure it is in your GitHub folder.</span>";
         }
     }
 
@@ -180,17 +167,14 @@
         const grid = document.getElementById('button-grid');
         const hintDisplay = document.getElementById('display-hint');
 
-        // Show Initial Hint
-        hintDisplay.innerHTML = `<strong>Initial Clue:</strong><br>${todaysObject.basic}`;
+        // Use your exact key: "Basic Hint"
+        hintDisplay.innerHTML = `<strong>Initial Clue:</strong><br>${todaysObject["Basic Hint"]}`;
 
-        // Create buttons for available hints
-        Object.keys(todaysObject.hints).forEach(key => {
-            const hintText = todaysObject.hints[key];
-            
-            // Only create button if hint exists and isn't empty
-            if (hintText && hintText.trim() !== "") {
+        // Generate buttons based on Hint_ keys
+        Object.keys(todaysObject).forEach(key => {
+            if (key.startsWith("Hint_") && todaysObject[key] && todaysObject[key].trim() !== "") {
                 const btn = document.createElement('button');
-                btn.innerText = categoryNames[key] || "Hint";
+                btn.innerText = categoryNames[key] || key.replace("Hint_", "");
                 btn.onclick = (e) => revealHint(key, e.target);
                 grid.appendChild(btn);
             }
@@ -199,55 +183,48 @@
 
     function revealHint(key, btn) {
         hintsUsedCount++;
-        hintPath += key;
+        // Grabs the letter after "Hint_" (e.g. "S")
+        const codeLetter = key.split('_')[1] || key.charAt(5);
+        hintPath += codeLetter;
         
-        const hintDisplay = document.getElementById('display-hint');
-        hintDisplay.innerHTML = `<strong>${categoryNames[key]}:</strong><br>${todaysObject.hints[key]}`;
-        
+        const displayName = categoryNames[key] || key.replace("Hint_", "");
+        document.getElementById('display-hint').innerHTML = `<strong>${displayName}:</strong><br>${todaysObject[key]}`;
         btn.disabled = true;
     }
 
     function checkGuess() {
+        if (!todaysObject) return;
         const userInput = document.getElementById('guess-input').value.trim().toUpperCase();
         
-        if (userInput === todaysObject.answer.toUpperCase()) {
+        // Use your exact key: "Answer"
+        if (userInput === todaysObject["Answer"].trim().toUpperCase()) {
             showWin();
         } else {
-            alert("Not quite! Try another hint or a different guess.");
+            alert("Not quite! Try another hint.");
         }
     }
 
     function showWin() {
-        const resultDiv = document.getElementById('result');
         const scoreString = `${hintsUsedCount}${hintPath}`;
-        
         document.getElementById('final-score-text').innerText = `Score: ${scoreString}`;
-        document.getElementById('answer-reveal').innerText = `The object was: ${todaysObject.answer}`;
-        
-        resultDiv.style.display = 'block';
+        document.getElementById('answer-reveal').innerText = `The object was: ${todaysObject["Answer"]}`;
+        document.getElementById('result').style.display = 'block';
         document.getElementById('guess-input').disabled = true;
         document.getElementById('submit-btn').disabled = true;
-        
-        // Scroll to results on mobile
-        resultDiv.scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
     function shareResults() {
         const scoreString = `${hintsUsedCount}${hintPath}`;
-        const shareText = `Daily Object ✅\nScore: ${scoreString}\nPlay here: [Your Link Here]`;
-        
+        const text = `I solved today's Daily Object!\nScore: ${scoreString}\nPlay here: ${window.location.href}`;
         if (navigator.share) {
-            navigator.share({
-                title: 'Daily Object',
-                text: shareText
-            });
+            navigator.share({ title: 'Daily Object', text: text });
         } else {
-            navigator.clipboard.writeText(shareText);
+            navigator.clipboard.writeText(text);
             alert("Score copied to clipboard!");
         }
     }
 
-    // Launch!
     initGame();
 </script>
 
