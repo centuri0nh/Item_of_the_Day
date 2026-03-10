@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Object Trivia</title>
+    <title>Item of the Day</title>
     <style>
         :root {
             --bg: #121213;
@@ -23,8 +23,16 @@
             margin: 0;
         }
         .container { max-width: 450px; width: 100%; text-align: center; }
-        header { border-bottom: 1px solid var(--button); margin-bottom: 20px; width: 100%; }
-        h1 { margin: 15px 0; letter-spacing: 1px; font-size: 1.6rem; }
+        
+        /* New Title Styling */
+        header { border-bottom: 2px solid var(--button); margin-bottom: 20px; width: 100%; }
+        h1 { 
+            margin: 15px 0; 
+            letter-spacing: 2px; 
+            font-size: 1.8rem; 
+            font-weight: 800;
+            text-transform: uppercase;
+        }
 
         .hint-box {
             background: var(--button);
@@ -37,7 +45,7 @@
             justify-content: center;
             font-size: 1.15rem;
             line-height: 1.5;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         #button-grid {
@@ -87,6 +95,12 @@
             border: 3px solid var(--accent);
             border-radius: 15px;
             background: rgba(83, 141, 78, 0.15);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .share-btn { background: #1da1f2; margin-top: 20px; width: 100%; }
@@ -97,16 +111,16 @@
 
 <div class="container">
     <header>
-        <h1>DAILY OBJECT</h1>
+        <h1>ITEM OF THE DAY</h1>
     </header>
     
     <div class="hint-box" id="display-hint">
-        Syncing with UTC Clock...
+        Loading...
     </div>
 
     <div id="button-grid"></div>
 
-    <input type="text" id="guess-input" placeholder="GUESS THE OBJECT" autocomplete="off">
+    <input type="text" id="guess-input" placeholder="GUESS THE ITEM" autocomplete="off">
     <button class="submit-btn" id="submit-btn" onclick="checkGuess()">SUBMIT GUESS</button>
 
     <div id="result">
@@ -118,7 +132,6 @@
 </div>
 
 <script>
-    // 1. Mapping for your specific Hint_ column headers
     const categoryNames = {
         Hint_S: "Science", Hint_E: "Entertainment", Hint_H: "History", 
         Hint_F: "Food", Hint_G: "Geography", Hint_P: "Pop Culture", 
@@ -131,20 +144,15 @@
 
     async function initGame() {
         try {
-            // Add a timestamp to the URL to bypass browser cache
             const response = await fetch('daily_data.json?t=' + new Date().getTime());
             const allData = await response.json();
 
-            // 2. FORCE UTC DATE CALCULATION
             const now = new Date();
             const year = now.getUTCFullYear();
             const month = String(now.getUTCMonth() + 1).padStart(2, '0');
             const day = String(now.getUTCDate()).padStart(2, '0');
             const utcToday = `${year}-${month}-${day}`;
 
-            console.log("UTC Today String:", utcToday);
-
-            // 3. Match against your exact JSON key: "Date (YYYY-MM-DD)"
             todaysObject = allData.find(item => {
                 const jsonDate = item["Date (YYYY-MM-DD)"].trim();
                 return jsonDate === utcToday;
@@ -154,23 +162,19 @@
                 renderGame();
             } else {
                 document.getElementById('display-hint').innerHTML = 
-                    `<span class='error-msg'>No object found for UTC Date: ${utcToday}.<br>Check your JSON file!</span>`;
+                    `<span class='error-msg'>No item found for UTC Date: ${utcToday}.<br>Check your JSON file!</span>`;
             }
         } catch (error) {
-            console.error("Initialization Error:", error);
-            document.getElementById('display-hint').innerHTML = 
-                "<span class='error-msg'>Could not load daily_data.json.<br>Ensure it is in your GitHub folder.</span>";
+            console.error(error);
+            document.getElementById('display-hint').innerHTML = "<span class='error-msg'>Could not load data.</span>";
         }
     }
 
     function renderGame() {
         const grid = document.getElementById('button-grid');
         const hintDisplay = document.getElementById('display-hint');
-
-        // Use your exact key: "Basic Hint"
         hintDisplay.innerHTML = `<strong>Initial Clue:</strong><br>${todaysObject["Basic Hint"]}`;
 
-        // Generate buttons based on Hint_ keys
         Object.keys(todaysObject).forEach(key => {
             if (key.startsWith("Hint_") && todaysObject[key] && todaysObject[key].trim() !== "") {
                 const btn = document.createElement('button');
@@ -183,10 +187,8 @@
 
     function revealHint(key, btn) {
         hintsUsedCount++;
-        // Grabs the letter after "Hint_" (e.g. "S")
         const codeLetter = key.split('_')[1] || key.charAt(5);
         hintPath += codeLetter;
-        
         const displayName = categoryNames[key] || key.replace("Hint_", "");
         document.getElementById('display-hint').innerHTML = `<strong>${displayName}:</strong><br>${todaysObject[key]}`;
         btn.disabled = true;
@@ -195,19 +197,17 @@
     function checkGuess() {
         if (!todaysObject) return;
         const userInput = document.getElementById('guess-input').value.trim().toUpperCase();
-        
-        // Use your exact key: "Answer"
         if (userInput === todaysObject["Answer"].trim().toUpperCase()) {
             showWin();
         } else {
-            alert("Not quite! Try another hint.");
+            alert("Not quite!");
         }
     }
 
     function showWin() {
         const scoreString = `${hintsUsedCount}${hintPath}`;
         document.getElementById('final-score-text').innerText = `Score: ${scoreString}`;
-        document.getElementById('answer-reveal').innerText = `The object was: ${todaysObject["Answer"]}`;
+        document.getElementById('answer-reveal').innerText = `The item was: ${todaysObject["Answer"]}`;
         document.getElementById('result').style.display = 'block';
         document.getElementById('guess-input').disabled = true;
         document.getElementById('submit-btn').disabled = true;
@@ -216,9 +216,9 @@
 
     function shareResults() {
         const scoreString = `${hintsUsedCount}${hintPath}`;
-        const text = `I solved today's Daily Object!\nScore: ${scoreString}\nPlay here: ${window.location.href}`;
+        const text = `I solved today's Item of the Day!\nScore: ${scoreString}\nPlay here: ${window.location.href}`;
         if (navigator.share) {
-            navigator.share({ title: 'Daily Object', text: text });
+            navigator.share({ title: 'Item of the Day', text: text });
         } else {
             navigator.clipboard.writeText(text);
             alert("Score copied to clipboard!");
