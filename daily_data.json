@@ -1,0 +1,54 @@
+[
+  {
+    "Date (YYYY-MM-DD)": "2026-03-10",
+    "Answer": "Test",
+    "Basic Hint": "Test G",
+    "Hint_S": "Test",
+    "Hint_E": "",
+    "Hint_H": "Test",
+    "Hint_F": "",
+    "Hint_G": "Test",
+    "Hint_P": "",
+    "Hint_U": "Test",
+    "Hint_N": "Test"
+  },
+  {
+    "Date (YYYY-MM-DD)": "2026-03-11",
+    "Answer": "LEMON",
+    "Basic Hint": "Acidic yellow fruit.",
+    "Hint_S": "",
+    "Hint_E": "Beyonc� album.",
+    "Hint_H": "Prevents scurvy.",
+    "Hint_F": "Meringue pie.",
+    "Hint_G": "",
+    "Hint_P": "",
+    "Hint_U": "",
+    "Hint_N": "Hybrid fruit."
+  },
+  {
+    "Date (YYYY-MM-DD)": "2026-03-12",
+    "Answer": "CARBON",
+    "Basic Hint": "Life's building block.",
+    "Hint_S": "4 valence bonds.",
+    "Hint_E": "Superman's diamond.",
+    "Hint_H": "Latin for coal.",
+    "Hint_F": "",
+    "Hint_G": "",
+    "Hint_P": "Footprint term.",
+    "Hint_U": "",
+    "Hint_N": ""
+  },
+  {
+    "Date (YYYY-MM-DD)": "2026-03-13",
+    "Answer": "COMPASS",
+    "Basic Hint": "Finds your way.",
+    "Hint_S": "Magnetic poles.",
+    "Hint_E": "Jack Sparrow's tool.",
+    "Hint_H": "Invented in China.",
+    "Hint_F": "",
+    "Hint_G": "Points North.",
+    "Hint_P": "",
+    "Hint_U": "Navigation.",
+    "Hint_N": ""
+  }
+]
