@@ -1,16 +1,16 @@
 [
   {
     "Date (YYYY-MM-DD)": "2026-03-10",
-    "Answer": "Test",
-    "Basic Hint": "Test G",
-    "Hint_S": "Test",
-    "Hint_E": "",
-    "Hint_H": "Test",
+    "Answer": "Cat",
+    "Basic Hint": "A four legged friend with an attitude.",
+    "Hint_S": "Have handy retractable claws",
+    "Hint_E": "Tom was one of these.",
+    "Hint_H": "Egpytians held them in high regard.",
     "Hint_F": "",
-    "Hint_G": "Test",
+    "Hint_G": "Larger, deadlier varients can be found in the wild",
     "Hint_P": "",
-    "Hint_U": "Test",
-    "Hint_N": "Test"
+    "Hint_U": "",
+    "Hint_N": "Can easily disrupt outside environments."
   },
   {
     "Date (YYYY-MM-DD)": "2026-03-11",
