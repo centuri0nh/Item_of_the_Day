@@ -10,12 +10,12 @@
     "Hint_G": "American's drop the E off.",
     "Hint_P": "",
     "Hint_U": "",
-    "Hint_N": "",
+    "Hint_N": "Wood's worst enemy.",
     "Hint_R": "The battle variants had two sides."
   },
   {
     "Date (YYYY-MM-DD)": "2026-03-15",
-    "Answer": "Orange",
+    "Answer": "ORANGE",
     "Basic Hint": "On both the spectrum of light and your plate.",
     "Hint_S": "A wavelength between 585 and 620 nanometres",
     "Hint_E": "Known for being annoying when it spoke in a video.",
@@ -32,27 +32,42 @@
     "Answer": "CARBON",
     "Basic Hint": "Life's building block.",
     "Hint_S": "4 valence bonds.",
-    "Hint_E": "Superman's diamond.",
+    "Hint_E": "The subtitle of an older Need for Speed game.",
     "Hint_H": "Latin for coal.",
     "Hint_F": "",
     "Hint_G": "",
     "Hint_P": "Footprint term.",
-    "Hint_U": "",
+    "Hint_U": "Can form alloys with iron.",
     "Hint_N": "",
-    "Hint_R": ""
+    "Hint_R": "Some cars have _ fiber accessories."
   },
   {
     "Date (YYYY-MM-DD)": "2026-03-17",
-    "Answer": "COMPASS",
-    "Basic Hint": "Finds your way.",
-    "Hint_S": "Magnetic poles.",
-    "Hint_E": "Jack Sparrow's tool.",
-    "Hint_H": "Invented in China.",
-    "Hint_F": "",
-    "Hint_G": "Points North.",
+    "Answer": "SNOW",
+    "Basic Hint": "",
+    "Hint_S": "Frozen crystalline water.",
+    "Hint_E": "President in the Hunger Games.",
+    "Hint_H": "",
+    "Hint_F": "Can be placed put in a cone with a topping.",
+    "Hint_G": "Ususally found at higher elevations and closer to the poles.",
     "Hint_P": "",
-    "Hint_U": "Navigation.",
+    "Hint_U": "Trucks need metal wedges to help move it.",
     "Hint_N": "",
-    "Hint_R": ""
+    "Hint_R": "Melting temperature of 0 degrees C."
+  },
+  {
+    "Date (YYYY-MM-DD)": "2026-03-18",
+    "Answer": "LIFE",
+    "Basic Hint": "Has only been seen on Earth (so far).",
+    "Hint_S": "Matter with a biological process.",
+    "Hint_E": "_ Uh, finds a way.",
+    "Hint_H": "Billions of years old.",
+    "Hint_F": "",
+    "Hint_G": "Found everywhere on Earth.",
+    "Hint_P": "",
+    "Hint_U": "",
+    "Hint_N": "A very complex part of nature.",
+    "Hint_R": "Carbon based (so far)."
   }
+
 ]
