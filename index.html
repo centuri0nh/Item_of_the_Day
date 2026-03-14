@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Item of the Day</title>
+    <title>Doodad of the Day</title>
     <style>
         :root {
             --bg: #121213;
@@ -20,7 +20,7 @@
             color: var(--text);
             display: flex; flex-direction: column; align-items: center;
             padding: 20px; margin: 0;
-            overflow: hidden; /* Prevent scrolling while overlay is up */
+            overflow: hidden; 
         }
         .container { max-width: 450px; width: 100%; text-align: center; }
         header { border-bottom: 2px solid var(--button); margin-bottom: 20px; width: 100%; }
@@ -44,7 +44,7 @@
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
-        .modal h2 { margin-top: 0; color: var(--accent); }
+        .modal h2 { margin-top: 0; color: var(--accent); letter-spacing: 1px; }
         .modal ul { text-align: left; font-size: 0.95rem; line-height: 1.6; margin: 20px 0; }
         .play-btn { 
             background: var(--accent); 
@@ -108,40 +108,40 @@
 
 <div id="splash-overlay">
     <div class="modal">
-        <h2>HOW TO PLAY</h2>
-        <p>Can you guess the <strong>Item of the Day</strong> in as few hints as possible?</p>
+        <h2>DOODAD DETECTIVE</h2>
+        <p>Can you guess the <strong>Doodad of the Day</strong> in as few hints as possible?</p>
         <ul>
-            <li>The item can be <strong>anything</strong>: a tool, a food, a landmark, or a common household object.</li>
-            <li>Each hint you take adds to your daily score.</li>
-            <li>Your score tracks your efficiency (e.g., <strong>2SE</strong> means 2 hints used: Science and Entertainment).</li>
+            <li>A <strong>Doodad</strong> could be any gadget, tool, household object, or landmark.</li>
+            <li>Use category hints if you're stuck. Each hint adds to your score.</li>
+            <li>Check back every day (UTC) for a new challenge!</li>
         </ul>
-        <button class="play-btn" onclick="startGame()">START GAME</button>
+        <button class="play-btn" onclick="startGame()">IDENTIFY DOODAD</button>
     </div>
 </div>
 
 <div class="container">
     <header>
-        <h1>ITEM OF THE DAY</h1>
+        <h1>DOODAD OF THE DAY</h1>
     </header>
     
-    <div class="hint-box" id="display-hint">Connecting...</div>
+    <div class="hint-box" id="display-hint">Looking for Doodad...</div>
 
     <div id="game-ui">
         <div class="sub-header" id="additional-hint-text" style="display:none;">Need an Additional Hint?</div>
         <div id="button-grid"></div>
-        <input type="text" id="guess-input" placeholder="GUESS THE ITEM" autocomplete="off">
+        <input type="text" id="guess-input" placeholder="NAME THE DOODAD" autocomplete="off">
         <button class="submit-btn" id="submit-btn" onclick="checkGuess()">SUBMIT GUESS</button>
     </div>
 
     <div id="result">
-        <h2 style="margin: 0 0 10px 0;">SOLVED! 🎉</h2>
+        <h2 style="margin: 0 0 10px 0;">DOODAD IDENTIFIED! 🎉</h2>
         <div class="streak-container">
             <div class="streak-stat">STREAK <span class="streak-val" id="streak-count">0</span></div>
             <div class="streak-stat">TOTAL WINS <span class="streak-val" id="total-wins">0</span></div>
         </div>
         <p id="final-score-text" style="font-size: 1.3rem; font-weight: bold; margin: 10px 0;"></p>
         <p id="answer-reveal" style="font-style: italic; opacity: 0.8;"></p>
-        <button class="share-btn" onclick="shareResults()">SHARE SCORE</button>
+        <button class="share-btn" onclick="shareResults()">SHARE DOODAD SCORE</button>
     </div>
 </div>
 
@@ -163,7 +163,6 @@
         return `${y}-${m}-${d}`;
     }
 
-    // New Function to close overlay and allow scrolling
     function startGame() {
         document.getElementById('splash-overlay').style.display = 'none';
         document.body.style.overflow = 'auto';
@@ -178,16 +177,16 @@
             todaysObject = allData.find(item => item["Date (YYYY-MM-DD)"].trim() === utcToday);
 
             if (!todaysObject) {
-                document.getElementById('display-hint').innerHTML = `<span class='error-msg'>New item coming at UTC midnight!</span>`;
+                document.getElementById('display-hint').innerHTML = `<span class='error-msg'>New Doodad arriving at UTC midnight!</span>`;
                 return;
             }
 
-            const lastSolvedDate = localStorage.getItem('iod_lastSolved');
+            // Updated keys to "dotd" for Doodad of the Day
+            const lastSolvedDate = localStorage.getItem('dotd_lastSolved');
             if (lastSolvedDate === utcToday) {
-                // If already solved, skip splash and show result
                 document.getElementById('splash-overlay').style.display = 'none';
                 document.body.style.overflow = 'auto';
-                const savedScore = localStorage.getItem('iod_lastScore') || "Solved";
+                const savedScore = localStorage.getItem('dotd_lastScore') || "Solved";
                 showWin(savedScore);
                 return;
             }
@@ -196,7 +195,7 @@
 
         } catch (error) {
             console.error(error);
-            document.getElementById('display-hint').innerHTML = "<span class='error-msg'>Data load error.</span>";
+            document.getElementById('display-hint').innerHTML = "<span class='error-msg'>Doodad Database Error. Check your JSON!</span>";
         }
     }
 
@@ -233,7 +232,7 @@
         if (userInput === todaysObject["Answer"].trim().toUpperCase()) {
             showWin();
         } else {
-            alert("Not quite!");
+            alert("Not that doodad! Try again.");
         }
     }
 
@@ -245,20 +244,20 @@
             updateStreakAndStats(utcToday, scoreString);
         }
 
-        document.getElementById('streak-count').innerText = localStorage.getItem('iod_streak') || 0;
-        document.getElementById('total-wins').innerText = localStorage.getItem('iod_totalWins') || 0;
+        document.getElementById('streak-count').innerText = localStorage.getItem('dotd_streak') || 0;
+        document.getElementById('total-wins').innerText = localStorage.getItem('dotd_totalWins') || 0;
         document.getElementById('final-score-text').innerText = `Score: ${scoreString}`;
-        document.getElementById('answer-reveal').innerText = `The item was: ${todaysObject["Answer"]}`;
+        document.getElementById('answer-reveal').innerText = `The doodad was: ${todaysObject["Answer"]}`;
         
         document.getElementById('game-ui').style.display = 'none';
-        document.getElementById('display-hint').innerHTML = "<strong>Come back tomorrow for a new item!</strong>";
+        document.getElementById('display-hint').innerHTML = "<strong>See you tomorrow for the next Doodad!</strong>";
         document.getElementById('result').style.display = 'block';
     }
 
     function updateStreakAndStats(todayStr, score) {
-        let streak = parseInt(localStorage.getItem('iod_streak') || "0");
-        let totalWins = parseInt(localStorage.getItem('iod_totalWins') || "0");
-        const lastDate = localStorage.getItem('iod_lastSolved');
+        let streak = parseInt(localStorage.getItem('dotd_streak') || "0");
+        let totalWins = parseInt(localStorage.getItem('dotd_totalWins') || "0");
+        const lastDate = localStorage.getItem('dotd_lastSolved');
         totalWins++;
 
         if (lastDate) {
@@ -271,21 +270,21 @@
             streak = 1;
         }
 
-        localStorage.setItem('iod_lastSolved', todayStr);
-        localStorage.setItem('iod_lastScore', score);
-        localStorage.setItem('iod_streak', streak);
-        localStorage.setItem('iod_totalWins', totalWins);
+        localStorage.setItem('dotd_lastSolved', todayStr);
+        localStorage.setItem('dotd_lastScore', score);
+        localStorage.setItem('dotd_streak', streak);
+        localStorage.setItem('dotd_totalWins', totalWins);
     }
 
     function shareResults() {
         const score = document.getElementById('final-score-text').innerText;
-        const streak = localStorage.getItem('iod_streak') || 0;
-        const text = `Item of the Day ✅\n${score}\nStreak: ${streak} days\nPlay: ${window.location.href}`;
+        const streak = localStorage.getItem('dotd_streak') || 0;
+        const text = `Doodad of the Day ✅\n${score}\nStreak: ${streak} days\nPlay: ${window.location.href}`;
         if (navigator.share) {
-            navigator.share({ title: 'Item of the Day', text: text });
+            navigator.share({ title: 'Doodad of the Day', text: text });
         } else {
             navigator.clipboard.writeText(text);
-            alert("Results copied!");
+            alert("Doodad score copied!");
         }
     }
 
