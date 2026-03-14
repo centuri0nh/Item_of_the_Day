@@ -1,34 +1,35 @@
 [
   {
-    "Date (YYYY-MM-DD)": "2026-03-10",
-    "Answer": "CAT",
-    "Basic Hint": "A domesticated obligate carnivore.",
-    "Hint_S": "Have handy retractable claws",
-    "Hint_E": "Tom was one of these.",
-    "Hint_H": "Egpytians held them in high regard.",
+    //Science, entertainment, history, food, geography, pop culture, utility, nature, random
+    "Date (YYYY-MM-DD)": "2026-03-14",
+    "Answer": "AXE",
+    "Basic Hint": "No gas required to help fell trees.",
+    "Hint_S": "Consists of a haft and head.",
+    "Hint_E": "Here's Johnny!",
+    "Hint_H": "Has been around for thousands of years.",
     "Hint_F": "",
-    "Hint_G": "Larger, deadlier varients can be found in the wild",
+    "Hint_G": "American's drop the E off.",
     "Hint_P": "",
     "Hint_U": "",
-    "Hint_N": "Can easily disrupt outside environments.",
-    "Hint_R": "Bob, in RuneScape."
+    "Hint_N": "",
+    "Hint_R": "The battle variants had two sides."
   },
   {
-    "Date (YYYY-MM-DD)": "2026-03-11",
-    "Answer": "LEMON",
-    "Basic Hint": "Acidic yellow fruit.",
-    "Hint_S": "",
-    "Hint_E": "Beyonc� album.",
-    "Hint_H": "Prevents scurvy.",
-    "Hint_F": "Meringue pie.",
+    "Date (YYYY-MM-DD)": "2026-03-15",
+    "Answer": "Orange",
+    "Basic Hint": "On both the spectrum of light and your plate.",
+    "Hint_S": "A wavelength between 585 and 620 nanometres",
+    "Hint_E": "Known for being annoying when it spoke in a video.",
+    "Hint_H": "Could help prevent scurvy.",
+    "Hint_F": "A citrus that makes excellent juice.",
     "Hint_G": "",
     "Hint_P": "",
     "Hint_U": "",
     "Hint_N": "Hybrid fruit.",
-    "Hint_R": ""
+    "Hint_R": "A classic prison jumpsuit color."
   },
   {
-    "Date (YYYY-MM-DD)": "2026-03-12",
+    "Date (YYYY-MM-DD)": "2026-03-16",
     "Answer": "CARBON",
     "Basic Hint": "Life's building block.",
     "Hint_S": "4 valence bonds.",
@@ -42,7 +43,7 @@
     "Hint_R": ""
   },
   {
-    "Date (YYYY-MM-DD)": "2026-03-13",
+    "Date (YYYY-MM-DD)": "2026-03-17",
     "Answer": "COMPASS",
     "Basic Hint": "Finds your way.",
     "Hint_S": "Magnetic poles.",

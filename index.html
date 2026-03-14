@@ -12,6 +12,7 @@
             --button: #3b3b3c;
             --button-hover: #4e4e50;
             --gold: #d4af37;
+            --overlay: rgba(0, 0, 0, 0.9);
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,11 +20,39 @@
             color: var(--text);
             display: flex; flex-direction: column; align-items: center;
             padding: 20px; margin: 0;
+            overflow: hidden; /* Prevent scrolling while overlay is up */
         }
         .container { max-width: 450px; width: 100%; text-align: center; }
         header { border-bottom: 2px solid var(--button); margin-bottom: 20px; width: 100%; }
         h1 { margin: 15px 0; letter-spacing: 2px; font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
 
+        /* --- SPLASH SCREEN STYLES --- */
+        #splash-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--overlay);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .modal {
+            max-width: 400px;
+            background: var(--button);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .modal h2 { margin-top: 0; color: var(--accent); }
+        .modal ul { text-align: left; font-size: 0.95rem; line-height: 1.6; margin: 20px 0; }
+        .play-btn { 
+            background: var(--accent); 
+            width: 100%; font-size: 1.5rem; padding: 20px; 
+            border-radius: 10px; cursor: pointer; border: none; color: white; font-weight: bold;
+        }
+
+        /* --- GAME STYLES --- */
         .hint-box {
             background: var(--button);
             padding: 25px 20px;
@@ -34,23 +63,13 @@
             font-size: 1.15rem; line-height: 1.5;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-
         .sub-header {
-            font-size: 0.9rem;
-            color: #aaa;
-            margin-bottom: 15px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.9rem; color: #aaa; margin-bottom: 15px;
+            font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
         }
-
         #button-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 25px;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px;
         }
-
         button {
             padding: 15px 10px; border: none; border-radius: 6px;
             background: var(--button); color: white;
@@ -67,7 +86,6 @@
             text-align: center; font-size: 1.4rem; margin-bottom: 15px; outline: none;
         }
         input:focus { border-color: var(--accent); }
-
         .submit-btn { background: var(--accent); width: 100%; font-size: 1.2rem; height: 60px; }
         
         #result {
@@ -75,28 +93,38 @@
             border: 3px solid var(--accent); border-radius: 15px;
             background: rgba(83, 141, 78, 0.15); animation: slideUp 0.5s ease-out;
         }
-
         .streak-container {
             display: flex; justify-content: space-around; margin: 15px 0;
             padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;
         }
         .streak-stat { display: flex; flex-direction: column; font-size: 0.8rem; color: #aaa; }
         .streak-val { font-size: 1.5rem; color: var(--gold); font-weight: bold; }
-
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
         .share-btn { background: #1da1f2; margin-top: 20px; width: 100%; }
         .error-msg { color: #ff6b6b; font-weight: bold; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
+<div id="splash-overlay">
+    <div class="modal">
+        <h2>HOW TO PLAY</h2>
+        <p>Can you guess the <strong>Item of the Day</strong> in as few hints as possible?</p>
+        <ul>
+            <li>The item can be <strong>anything</strong>: a tool, a food, a landmark, or a common household object.</li>
+            <li>Each hint you take adds to your daily score.</li>
+            <li>Your score tracks your efficiency (e.g., <strong>2SE</strong> means 2 hints used: Science and Entertainment).</li>
+        </ul>
+        <button class="play-btn" onclick="startGame()">START GAME</button>
+    </div>
+</div>
+
 <div class="container">
     <header>
         <h1>ITEM OF THE DAY</h1>
     </header>
     
-    <div class="hint-box" id="display-hint">Loading...</div>
+    <div class="hint-box" id="display-hint">Connecting...</div>
 
     <div id="game-ui">
         <div class="sub-header" id="additional-hint-text" style="display:none;">Need an Additional Hint?</div>
@@ -135,6 +163,12 @@
         return `${y}-${m}-${d}`;
     }
 
+    // New Function to close overlay and allow scrolling
+    function startGame() {
+        document.getElementById('splash-overlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
     async function initGame() {
         try {
             const response = await fetch('daily_data.json?t=' + new Date().getTime());
@@ -150,6 +184,9 @@
 
             const lastSolvedDate = localStorage.getItem('iod_lastSolved');
             if (lastSolvedDate === utcToday) {
+                // If already solved, skip splash and show result
+                document.getElementById('splash-overlay').style.display = 'none';
+                document.body.style.overflow = 'auto';
                 const savedScore = localStorage.getItem('iod_lastScore') || "Solved";
                 showWin(savedScore);
                 return;
@@ -168,7 +205,6 @@
         document.getElementById('display-hint').innerHTML = `<strong>Initial Clue:</strong><br>${todaysObject["Basic Hint"]}`;
         
         let hasHints = false;
-
         Object.keys(todaysObject).forEach(key => {
             if (key.startsWith("Hint_") && todaysObject[key] && todaysObject[key].trim() !== "") {
                 const btn = document.createElement('button');
