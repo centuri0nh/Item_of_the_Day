@@ -12,87 +12,85 @@
             --button: #3b3b3c;
             --button-hover: #4e4e50;
             --gold: #d4af37;
+            --error: #a33b3b;
             --overlay: rgba(0, 0, 0, 0.9);
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg); color: var(--text);
             display: flex; flex-direction: column; align-items: center;
-            padding: 20px; margin: 0;
-            overflow: hidden; 
+            padding: 20px; margin: 0; overflow: hidden; 
         }
         .container { max-width: 450px; width: 100%; text-align: center; }
         header { border-bottom: 2px solid var(--button); margin-bottom: 20px; width: 100%; }
         h1 { margin: 15px 0; letter-spacing: 2px; font-size: 1.8rem; font-weight: 800; text-transform: uppercase; }
 
-        /* --- SPLASH SCREEN STYLES --- */
+        /* --- OVERLAYS & MODALS --- */
         #splash-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--overlay);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--overlay); display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; z-index: 1000;
+            padding: 20px; box-sizing: border-box; text-align: center;
         }
         .modal {
-            max-width: 400px;
-            background: var(--button);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            max-width: 400px; background: var(--button); padding: 30px;
+            border-radius: 15px; box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
         .modal h2 { margin-top: 0; color: var(--accent); letter-spacing: 1px; }
         .modal ul { text-align: left; font-size: 0.95rem; line-height: 1.6; margin: 20px 0; }
+        
+        /* --- BUTTONS --- */
         .play-btn { 
-            background: var(--accent); 
-            width: 100%; font-size: 1.5rem; padding: 20px; 
+            background: var(--accent); width: 100%; font-size: 1.5rem; padding: 20px; 
             border-radius: 10px; cursor: pointer; border: none; color: white; font-weight: bold;
         }
+        .forfeit-link {
+            margin-top: 20px; display: inline-block; color: #888; 
+            text-decoration: underline; font-size: 0.85rem; cursor: pointer; border: none; background: none;
+        }
+        .forfeit-link:hover { color: var(--error); }
 
-        /* --- GAME STYLES --- */
+        /* --- GAMEPLAY UI --- */
         .hint-box {
-            background: var(--button);
-            padding: 25px 20px;
-            border-radius: 12px;
-            margin: 20px 0 10px 0;
-            min-height: 100px;
-            display: flex; flex-direction: column; justify-content: center;
-            font-size: 1.15rem; line-height: 1.5;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            background: var(--button); padding: 25px 20px; border-radius: 12px;
+            margin: 20px 0 10px 0; min-height: 100px; display: flex; 
+            flex-direction: column; justify-content: center; font-size: 1.15rem; 
+            line-height: 1.5; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
         .sub-header {
             font-size: 0.9rem; color: #aaa; margin-bottom: 15px;
             font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
         }
-        #button-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px;
-        }
-        button {
+        #button-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
+        .hint-btn {
             padding: 15px 10px; border: none; border-radius: 6px;
-            background: var(--button); color: white;
-            cursor: pointer; font-weight: bold; font-size: 0.9rem;
-            text-transform: uppercase; transition: 0.2s;
+            background: var(--button); color: white; cursor: pointer; 
+            font-weight: bold; font-size: 0.9rem; text-transform: uppercase; transition: 0.2s;
         }
-        button:hover:not(:disabled) { background: var(--button-hover); }
-        button:disabled { opacity: 0.2; cursor: default; }
+        .hint-btn:hover:not(:disabled) { background: var(--button-hover); }
+        .hint-btn:disabled { opacity: 0.2; cursor: default; }
 
         input {
-            width: 100%; padding: 15px; border-radius: 6px;
-            border: 2px solid var(--button); background: #000;
-            color: white; box-sizing: border-box; text-transform: uppercase;
+            width: 100%; padding: 15px; border-radius: 6px; border: 2px solid var(--button); 
+            background: #000; color: white; box-sizing: border-box; text-transform: uppercase;
             text-align: center; font-size: 1.4rem; margin-bottom: 15px; outline: none;
         }
         input:focus { border-color: var(--accent); }
-        .submit-btn { background: var(--accent); width: 100%; font-size: 1.2rem; height: 60px; }
+        .submit-btn { background: var(--accent); width: 100%; font-size: 1.2rem; height: 60px; border:none; color:white; font-weight:bold; border-radius:6px; cursor:pointer;}
         
+        /* --- RESULTS & REVEAL --- */
         #result {
-            display: none; margin-top: 30px; padding: 25px;
-            border: 3px solid var(--accent); border-radius: 15px;
-            background: rgba(83, 141, 78, 0.15); animation: slideUp 0.5s ease-out;
+            display: none; margin-top: 20px; padding: 20px; border: 3px solid var(--accent); 
+            border-radius: 15px; background: rgba(83, 141, 78, 0.15); animation: slideUp 0.5s ease-out;
         }
+        .forfeit-result { border-color: var(--error) !important; background: rgba(163, 59, 59, 0.1) !important; }
+        
+        .all-hints-list {
+            text-align: left; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .hint-item { margin-bottom: 12px; font-size: 0.9rem; }
+        .hint-label { color: var(--gold); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; margin-right: 5px; }
+
         .streak-container {
             display: flex; justify-content: space-around; margin: 15px 0;
             padding: 10px; background: rgba(255, 255, 255, 0.05); border-radius: 8px;
@@ -100,7 +98,7 @@
         .streak-stat { display: flex; flex-direction: column; font-size: 0.8rem; color: #aaa; }
         .streak-val { font-size: 1.5rem; color: var(--gold); font-weight: bold; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .share-btn { background: #1da1f2; margin-top: 20px; width: 100%; }
+        .share-btn { background: #1da1f2; margin-top: 20px; width: 100%; padding:15px; border:none; color:white; font-weight:bold; border-radius:6px; cursor:pointer;}
         .error-msg { color: #ff6b6b; font-weight: bold; font-size: 0.9rem; }
     </style>
 </head>
@@ -109,39 +107,42 @@
 <div id="splash-overlay">
     <div class="modal">
         <h2>DOODAD DETECTIVE</h2>
-        <p>Can you guess the <strong>Doodad of the Day</strong> in as few hints as possible?</p>
+        <p>Identify the <strong>Doodad of the Day</strong> in as few hints as possible.</p>
         <ul>
-            <li>A <strong>Doodad</strong> could be any object found in our universe, from a cat to a tractor to a tree.</li>
-            <li>Use category hints if you're stuck. Each hint adds to your score. The lower the score the better!</li>
-            <li>Check back every day (UTC) for a new challenge!</li>
+            <li>New Hampshire Time: Midnight Reset.</li>
+            <li>Category hints reveal more clues.</li>
+            <li>Stumped? You can forfeit to see the answer.</li>
         </ul>
-        <button class="play-btn" onclick="startGame()">IDENTIFY DOODAD</button>
+        <button class="play-btn" onclick="startGame()">START INVESTIGATION</button>
     </div>
 </div>
 
 <div class="container">
-    <header>
-        <h1>DOODAD OF THE DAY</h1>
-    </header>
+    <header><h1>DOODAD OF THE DAY</h1></header>
+    <div class="hint-box" id="display-hint">Loading Doodad...</div>
     
-    <div class="hint-box" id="display-hint">Looking for Doodad...</div>
-
     <div id="game-ui">
         <div class="sub-header" id="additional-hint-text" style="display:none;">Need an Additional Hint?</div>
         <div id="button-grid"></div>
         <input type="text" id="guess-input" placeholder="NAME THE DOODAD" autocomplete="off">
         <button class="submit-btn" id="submit-btn" onclick="checkGuess()">SUBMIT GUESS</button>
+        <button class="forfeit-link" id="forfeit-btn" onclick="forfeitGame()">I'm stumped. Reveal the Doodad.</button>
     </div>
 
     <div id="result">
-        <h2 style="margin: 0 0 10px 0;">DOODAD IDENTIFIED! 🎉</h2>
+        <h2 id="result-title" style="margin: 0 0 10px 0;">SOLVED! 🎉</h2>
         <div class="streak-container">
             <div class="streak-stat">STREAK <span class="streak-val" id="streak-count">0</span></div>
             <div class="streak-stat">TOTAL WINS <span class="streak-val" id="total-wins">0</span></div>
         </div>
-        <p id="final-score-text" style="font-size: 1.3rem; font-weight: bold; margin: 10px 0;"></p>
-        <p id="answer-reveal" style="font-style: italic; opacity: 0.8;"></p>
-        <button class="share-btn" onclick="shareResults()">SHARE DOODAD SCORE</button>
+        <p id="final-score-text" style="font-size: 1.2rem; font-weight: bold; margin: 10px 0;"></p>
+        <p id="answer-reveal" style="font-style: italic; font-size: 1.4rem; color: var(--gold); margin: 15px 0;"></p>
+        
+        <div class="all-hints-list" id="all-hints-reveal">
+            <div class="sub-header" style="margin-bottom:10px;">Full Briefing:</div>
+        </div>
+
+        <button class="share-btn" id="share-btn" onclick="shareResults()">SHARE DOODAD SCORE</button>
     </div>
 </div>
 
@@ -156,11 +157,8 @@
     let hintsUsedCount = 0;
     let hintPath = "";
 
-    function getUtcDate(dateObj = new Date()) {
-        const y = dateObj.getUTCFullYear();
-        const m = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
-        const d = String(dateObj.getUTCDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
+    function getGameDate() {
+        return new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
     }
 
     function startGame() {
@@ -172,124 +170,145 @@
         try {
             const response = await fetch('daily_data.json?t=' + new Date().getTime());
             const allData = await response.json();
-            const utcToday = getUtcDate();
+            const gameToday = getGameDate();
 
-            todaysObject = allData.find(item => item["Date (YYYY-MM-DD)"].trim() === utcToday);
-
+            todaysObject = allData.find(item => item["Date (YYYY-MM-DD)"].trim() === gameToday);
             if (!todaysObject) {
-                document.getElementById('display-hint').innerHTML = `<span class='error-msg'>New Doodad arriving at UTC midnight!</span>`;
+                document.getElementById('display-hint').innerHTML = `<span class='error-msg'>Next Doodad arrives at Midnight!</span>`;
                 return;
             }
 
-            // Updated keys to "dotd" for Doodad of the Day
-            const lastSolvedDate = localStorage.getItem('dotd_lastSolved');
-            if (lastSolvedDate === utcToday) {
-                document.getElementById('splash-overlay').style.display = 'none';
-                document.body.style.overflow = 'auto';
-                const savedScore = localStorage.getItem('dotd_lastScore') || "Solved";
-                showWin(savedScore);
+            if (localStorage.getItem('dotd_activeDate') !== gameToday) {
+                localStorage.setItem('dotd_activeHints', "[]");
+                localStorage.setItem('dotd_activeDate', gameToday);
+            }
+
+            const lastStatus = localStorage.getItem('dotd_lastStatus'); // "solved" or "forfeit"
+            if (localStorage.getItem('dotd_lastSolved') === gameToday) {
+                startGame();
+                showEndState(localStorage.getItem('dotd_lastScore'), lastStatus === 'forfeit');
                 return;
             }
 
             renderGame();
-
-        } catch (error) {
-            console.error(error);
-            document.getElementById('display-hint').innerHTML = "<span class='error-msg'>Doodad Database Error. Check your JSON!</span>";
-        }
+        } catch (e) { document.getElementById('display-hint').innerHTML = "<span class='error-msg'>Database Error!</span>"; }
     }
 
     function renderGame() {
         const grid = document.getElementById('button-grid');
-        document.getElementById('display-hint').innerHTML = `<strong>Initial Clue:</strong><br>${todaysObject["Basic Hint"]}`;
+        const savedHints = JSON.parse(localStorage.getItem('dotd_activeHints') || "[]");
+        document.getElementById('display-hint').innerHTML = `<strong>Initial Clue:</strong><br>${todaysObject["Basic Hint"] || "No clue provided."}`;
         
         let hasHints = false;
         Object.keys(todaysObject).forEach(key => {
             if (key.startsWith("Hint_") && todaysObject[key] && todaysObject[key].trim() !== "") {
                 const btn = document.createElement('button');
+                btn.className = "hint-btn";
                 btn.innerText = categoryNames[key] || key.replace("Hint_", "");
+                btn.id = `btn-${key}`;
                 btn.onclick = (e) => revealHint(key, e.target);
                 grid.appendChild(btn);
                 hasHints = true;
+                if (savedHints.includes(key)) revealHint(key, btn, true);
             }
         });
-
-        if(hasHints) {
-            document.getElementById('additional-hint-text').style.display = 'block';
-        }
+        if(hasHints) document.getElementById('additional-hint-text').style.display = 'block';
     }
 
-    function revealHint(key, btn) {
+    function revealHint(key, btn, isReload = false) {
         hintsUsedCount++;
         const codeLetter = key.split('_')[1] || key.charAt(5);
         hintPath += codeLetter;
+        if (!isReload) {
+            const current = JSON.parse(localStorage.getItem('dotd_activeHints') || "[]");
+            current.push(key);
+            localStorage.setItem('dotd_activeHints', JSON.stringify(current));
+        }
         document.getElementById('display-hint').innerHTML = `<strong>${categoryNames[key] || "Hint"}:</strong><br>${todaysObject[key]}`;
-        btn.disabled = true;
+        if (btn) btn.disabled = true;
     }
 
     function checkGuess() {
-        const userInput = document.getElementById('guess-input').value.trim().toUpperCase();
-        if (userInput === todaysObject["Answer"].trim().toUpperCase()) {
-            showWin();
-        } else {
-            alert("Not that doodad! Try again.");
+        const input = document.getElementById('guess-input').value.trim().toUpperCase();
+        if (input === todaysObject["Answer"].trim().toUpperCase()) showEndState();
+        else alert("Not that doodad!");
+    }
+
+    function forfeitGame() {
+        if(confirm("Are you sure? This will end your streak and reveal the answer.")) {
+            showEndState("FORFEIT", true);
         }
     }
 
-    function showWin(reloadedScore = null) {
-        const utcToday = getUtcDate();
-        const scoreString = reloadedScore || `${hintsUsedCount}${hintPath}`;
+    function showEndState(savedScore = null, isForfeit = false) {
+        const gameToday = getGameDate();
+        const finalScore = savedScore || `${hintsUsedCount}${hintPath}`;
 
-        if (!reloadedScore) {
-            updateStreakAndStats(utcToday, scoreString);
+        if (!savedScore) updateStats(gameToday, finalScore, isForfeit);
+
+        // Update UI
+        const resultDiv = document.getElementById('result');
+        const title = document.getElementById('result-title');
+        
+        if (isForfeit) {
+            resultDiv.classList.add('forfeit-result');
+            title.innerText = "OUT OF CLUES! 🕵️‍♂️";
+            document.getElementById('final-score-text').innerText = "Better luck tomorrow!";
+            document.getElementById('share-btn').style.display = 'none'; // Optional: hide share on forfeit
+        } else {
+            title.innerText = "DOODAD IDENTIFIED! 🎉";
+            document.getElementById('final-score-text').innerText = `Score: ${finalScore}`;
         }
 
         document.getElementById('streak-count').innerText = localStorage.getItem('dotd_streak') || 0;
         document.getElementById('total-wins').innerText = localStorage.getItem('dotd_totalWins') || 0;
-        document.getElementById('final-score-text').innerText = `Score: ${scoreString}`;
-        document.getElementById('answer-reveal').innerText = `The doodad was: ${todaysObject["Answer"]}`;
+        document.getElementById('answer-reveal').innerText = todaysObject["Answer"];
         
+        // Reveal All Hints
+        const hintsReveal = document.getElementById('all-hints-reveal');
+        Object.keys(todaysObject).forEach(key => {
+            if (key.startsWith("Hint_") && todaysObject[key] && todaysObject[key].trim() !== "") {
+                const hItem = document.createElement('div');
+                hItem.className = "hint-item";
+                hItem.innerHTML = `<span class="hint-label">${categoryNames[key]}:</span> ${todaysObject[key]}`;
+                hintsReveal.appendChild(hItem);
+            }
+        });
+
         document.getElementById('game-ui').style.display = 'none';
-        document.getElementById('display-hint').innerHTML = "<strong>See you tomorrow for the next Doodad!</strong>";
-        document.getElementById('result').style.display = 'block';
+        document.getElementById('display-hint').innerHTML = "<strong>Case Closed.</strong>";
+        resultDiv.style.display = 'block';
     }
 
-    function updateStreakAndStats(todayStr, score) {
+    function updateStats(today, score, isForfeit) {
         let streak = parseInt(localStorage.getItem('dotd_streak') || "0");
-        let totalWins = parseInt(localStorage.getItem('dotd_totalWins') || "0");
-        const lastDate = localStorage.getItem('dotd_lastSolved');
-        totalWins++;
+        let total = parseInt(localStorage.getItem('dotd_totalWins') || "0");
+        const last = localStorage.getItem('dotd_lastSolved');
 
-        if (lastDate) {
-            const lastDateObj = new Date(lastDate + "T00:00:00Z");
-            const todayObj = new Date(todayStr + "T00:00:00Z");
-            const diffDays = (todayObj - lastDateObj) / (1000 * 60 * 60 * 24);
-            if (diffDays === 1) streak++; 
-            else if (diffDays > 1) streak = 1;
+        if (isForfeit) {
+            streak = 0; // Break the streak
         } else {
-            streak = 1;
+            total++; // Only increment wins if solved
+            if (last) {
+                const diff = (new Date(today+"T00:00:00") - new Date(last+"T00:00:00")) / 86400000;
+                streak = (diff === 1) ? streak + 1 : 1;
+            } else { streak = 1; }
         }
 
-        localStorage.setItem('dotd_lastSolved', todayStr);
+        localStorage.setItem('dotd_lastSolved', today);
         localStorage.setItem('dotd_lastScore', score);
+        localStorage.setItem('dotd_lastStatus', isForfeit ? 'forfeit' : 'solved');
         localStorage.setItem('dotd_streak', streak);
-        localStorage.setItem('dotd_totalWins', totalWins);
+        localStorage.setItem('dotd_totalWins', total);
     }
 
     function shareResults() {
-        const score = document.getElementById('final-score-text').innerText;
-        const streak = localStorage.getItem('dotd_streak') || 0;
-        const text = `Doodad of the Day ✅\n${score}\nStreak: ${streak} days\nPlay: ${window.location.href}`;
-        if (navigator.share) {
-            navigator.share({ title: 'Doodad of the Day', text: text });
-        } else {
-            navigator.clipboard.writeText(text);
-            alert("Doodad score copied!");
-        }
+        const text = `Doodad of the Day ✅\nScore: ${localStorage.getItem('dotd_lastScore')}\nStreak: ${localStorage.getItem('dotd_streak')} days\nPlay: ${window.location.href}`;
+        if (navigator.share) navigator.share({ title: 'Doodad of the Day', text: text });
+        else { navigator.clipboard.writeText(text); alert("Score copied!"); }
     }
 
     initGame();
 </script>
-
 </body>
 </html>
