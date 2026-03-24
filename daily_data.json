@@ -2,7 +2,7 @@
   {
     "Date (YYYY-MM-DD)": "2026-03-24",
     "Answer": "AXE",
-    "Basic Hint": "No gas required to help fell trees.",
+    "Basic Hint": "No gas required for this to help you fell trees.",
     "Hint_S": "Consists of a haft and head.",
     "Hint_E": "Here's Johnny!",
     "Hint_H": "Has been around for thousands of years.",
@@ -44,7 +44,7 @@
   {
     "Date (YYYY-MM-DD)": "2026-03-27",
     "Answer": "SNOW",
-    "Basic Hint": "",
+    "Basic Hint": "Cold, can be light or heavy, and can shut down roads.",
     "Hint_S": "Frozen crystalline water.",
     "Hint_E": "President in the Hunger Games.",
     "Hint_H": "",
